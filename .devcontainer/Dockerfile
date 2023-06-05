@@ -9,14 +9,15 @@ RUN groupadd --gid $USER_GID $USERNAME \
 
 # Setup prerequisites
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        ca-certificates \
-        git \
-        python3 \
+    ca-certificates \
+    git \
+    pkg-config \
+    python3 \
     && apt-get -y clean \
     && rm -rf /var/lib/apt/lists/*
 
 # https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
-    # P.7
+# P.6
 RUN cd /home/pi/ \
     && mkdir pico \
     && cd pico \
@@ -25,23 +26,26 @@ RUN cd /home/pi/ \
     && cd pico-sdk \
     && git submodule update --init --recommend-shallow --depth=1 \
     && cd .. \
-    && git clone https://github.com/raspberrypi/pico-examples.git --branch master --single-branch --depth=1 \
-    \
-    # P.8
-    && apt-get update \
+    && git clone https://github.com/raspberrypi/pico-examples.git --branch master --single-branch --depth=1
+
+# P.7
+RUN apt-get update \
     && apt-get install -y --no-install-recommends cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential libstdc++-arm-none-eabi-newlib \
     && apt-get -y clean \
-    && rm -rf /var/lib/apt/lists/* \
-    \
-    # P.18
-    && apt-get update \
+    && rm -rf /var/lib/apt/lists/*
+
+# P.16
+RUN apt-get update \
     && apt-get install -y --no-install-recommends minicom \
     && apt-get -y clean \
-    && rm -rf /var/lib/apt/lists/* \
-    \
-    # P.23
-    && cd /home/pi/ \
+    && rm -rf /var/lib/apt/lists/*
+
+# P.19
+RUN cd /home/pi/ \
+    && apt-get update \
     && apt-get install -y --no-install-recommends automake autoconf build-essential texinfo libtool libftdi-dev libusb-1.0.0-dev \
+    && apt-get -y clean \
+    && rm -rf /var/lib/apt/lists/* \
     && git clone https://github.com/raspberrypi/openocd.git --branch rp2040 --recursive --depth=1 \
     && cd openocd \
     && ./bootstrap \
@@ -49,5 +53,13 @@ RUN cd /home/pi/ \
     && make -j4 \
     && make install
 
-USER $USERNAME
+# P.22
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gdb-multiarch \
+    && apt-get -y clean \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV PICO_SDK_PATH="/home/pi/pico/pico-sdk"
+
+RUN chown -R $USERNAME /home/pi/
+USER $USERNAME

@@ -6,6 +6,8 @@
     "customizations": {
         "vscode": {
             "extensions": [
+                // P.26
+                "marus25.cortex-debug",
                 "ms-vscode.cpptools-extension-pack"
             ]
         }

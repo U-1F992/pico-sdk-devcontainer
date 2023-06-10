@@ -61,5 +61,15 @@ RUN apt-get update \
 
 ENV PICO_SDK_PATH="/home/pi/pico/pico-sdk"
 
+# P.69
+RUN cd /home/pi/ \
+    && git clone https://github.com/raspberrypi/picotool.git --branch master --single-branch --depth=1 \
+    && cd picotool \
+    && mkdir build \
+    && cd build \
+    && cmake ../ \
+    && make \
+    && make install
+
 RUN chown -R $USERNAME /home/pi/
-USER $USERNAME
+#USER $USERNAME

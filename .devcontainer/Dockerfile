@@ -72,4 +72,6 @@ RUN cd /home/pi/ \
     && make install
 
 RUN chown -R $USERNAME /home/pi/
-#USER $USERNAME
+
+# TODO: Using a non-root user, you will not be able to find Picoprobe.
+# USER $USERNAME

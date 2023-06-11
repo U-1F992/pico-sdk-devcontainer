@@ -22,6 +22,11 @@
             "postRestartCommands": [
                 "break main",
                 "continue"
+            ],
+            
+            // https://github.com/raspberrypi/picoprobe/issues/49#issuecomment-1331748165
+            "openOCDLaunchCommands": [
+                "adapter speed 5000"
             ]
         }
     ]
